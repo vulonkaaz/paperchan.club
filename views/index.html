@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Paperchan.club</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="/style.css"/>
+</head>
+
+<body>
+	<main>
+		<h1>Paperchan.club</h1>
+		<section class="threadlist">
+			{{ range .posts }}
+			<article>
+				<a href="/thread/{{.Id}}"><img src="{{.Picture}}"></a>
+				<p>Id : {{.Id}}, Replies : {{.Replies}}</p>
+				<p>{{.CreatedAt}}</p>
+			</article>
+			{{ end }}
+		</section>
+{{template "partials/canvas" .}}

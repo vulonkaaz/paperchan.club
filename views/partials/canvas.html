@@ -1,0 +1,86 @@
+		<div class="editor">
+			<canvas id="canvas" style="background:#fff; border:1px inset #888" width="400" height="200"></canvas><br>
+			<button type="button" id="blackbtn">Black</button> <button type="button" id="whitebtn">White</button>
+			<button type="button" id="redbtn">Red</button> <button type="button" id="bluebtn">Blue</button><br>
+			pen size : <input type="number" id="pensize" value="1" min="1" max="99"><br>
+			<button type="button" id="sendbtn">Send</button>
+		</div>
+		<footer><a href="/about.html">About this site</a></footer>
+	</main>
+</body>
+<script type="text/javascript">
+	const canvas = document.getElementById('canvas');
+	const ctx = canvas.getContext('2d');
+	//ctx.fillStyle = "black";
+	let isDrawing = false;
+
+	function startDrawing(event) {
+ 		isDrawing = true;
+ 		draw(event);
+	}
+	function draw(event) {
+		if (!isDrawing) return;
+		const x = event.clientX - canvas.offsetLeft + window.pageXOffset;
+		const y = event.clientY - canvas.offsetTop + window.pageYOffset;
+		ctx.lineTo(x, y);
+		ctx.stroke();
+	}
+	function stopDrawing() {
+ 		isDrawing = false;
+ 		ctx.beginPath();
+	}
+	canvas.addEventListener("mousedown", startDrawing);
+	canvas.addEventListener("mousemove", draw);
+	canvas.addEventListener("mouseup", stopDrawing);
+	canvas.addEventListener("mouseout", stopDrawing);
+
+	function sendPic() {
+		fetch("/api/post", {
+			method: "POST",
+			body: JSON.stringify({ {{ if .threadId }}
+				thread: "{{.threadId}}",{{ end }}
+				picture: canvas.toDataURL("image/png")
+			}),
+			headers: {
+				"Content-type": "application/json; charset=UTF-8"
+			}
+		})
+			.then((response) => response.json())
+  			.then((json) => {
+  				if (json.status == "ok") {
+  					location.reload();
+  				}
+  			});
+	}
+	const sendbtn = document.getElementById('sendbtn');
+	sendbtn.addEventListener("click", sendPic);
+
+	const blackbtn = document.getElementById('blackbtn');
+	blackbtn.addEventListener("click", () => {
+		ctx.strokeStyle="black";
+	});
+
+	const whitebtn = document.getElementById('whitebtn');
+	whitebtn.addEventListener("click", () => {
+		ctx.strokeStyle="white";
+	});
+
+	const redbtn = document.getElementById('redbtn');
+	redbtn.addEventListener("click", () => {
+		ctx.strokeStyle="red";
+	});
+
+	const bluebtn = document.getElementById('bluebtn');
+	bluebtn.addEventListener("click", () => {
+		ctx.strokeStyle="blue";
+	});
+
+	const pensize = document.getElementById('pensize');
+	pensize.addEventListener("change", () => {
+		ctx.lineWidth=pensize.value;
+		console.log(pensize.value)
+	});
+</script>
+
+</html>
+
