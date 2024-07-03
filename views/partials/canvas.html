@@ -15,17 +15,33 @@
 	let isDrawing = false;
 
 	function startDrawing(event) {
+ 		event.preventDefault();
  		isDrawing = true;
  		draw(event);
 	}
+	function startDrawingTouch(event) {
+ 		event.preventDefault();
+ 		isDrawing = true;
+ 		drawTouch(event);
+	}
 	function draw(event) {
+		event.preventDefault();
 		if (!isDrawing) return;
 		const x = event.clientX - canvas.offsetLeft + window.pageXOffset;
 		const y = event.clientY - canvas.offsetTop + window.pageYOffset;
 		ctx.lineTo(x, y);
 		ctx.stroke();
 	}
+	function drawTouch(event) {
+		event.preventDefault();
+		if (!isDrawing) return;
+		const x = event.touches[0].clientX - canvas.offsetLeft + window.pageXOffset;
+		const y = event.touches[0].clientY - canvas.offsetTop + window.pageYOffset;
+		ctx.lineTo(x, y);
+		ctx.stroke();
+	}
 	function stopDrawing() {
+ 		event.preventDefault();
  		isDrawing = false;
  		ctx.beginPath();
 	}
@@ -33,6 +49,10 @@
 	canvas.addEventListener("mousemove", draw);
 	canvas.addEventListener("mouseup", stopDrawing);
 	canvas.addEventListener("mouseout", stopDrawing);
+	canvas.addEventListener("touchstart", startDrawingTouch);
+	canvas.addEventListener("touchmove", drawTouch);
+	canvas.addEventListener("touchend", stopDrawing);
+	canvas.addEventListener("touchcancel", stopDrawing);
 
 	function sendPic() {
 		fetch("/api/post", {
