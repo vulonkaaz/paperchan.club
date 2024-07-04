@@ -55,6 +55,10 @@ func DataURLConverter(dataURL string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	err = magick.QuantizeImage(4, imagick.COLORSPACE_UNDEFINED, 0, imagick.DITHER_METHOD_RIEMERSMA, false)
+	if err != nil {
+		return "", err
+	}
 	imageBytesProcessed, err := magick.GetImageBlob()
 	if err != nil {
 		return "", err
