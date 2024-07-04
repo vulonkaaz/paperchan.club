@@ -43,6 +43,18 @@ func DataURLConverter(dataURL string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	err = magick.SetCompression(imagick.COMPRESSION_LZMA)
+	if err != nil {
+		return "", err
+	}
+	err = magick.StripImage()
+	if err != nil {
+		return "", err
+	}
+	err = magick.SetDepth(8)
+	if err != nil {
+		return "", err
+	}
 	imageBytesProcessed, err := magick.GetImageBlob()
 	if err != nil {
 		return "", err
