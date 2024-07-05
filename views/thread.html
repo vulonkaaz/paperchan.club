@@ -15,7 +15,8 @@
 			{{ range .posts }}
 			<article>
 				<img src="{{.Picture}}">
-				<p>{{.CreatedAt}}</p>
+				<p>id: {{.Id}}<br>
+				{{.CreatedAt}}</p>
 			</article>
 			{{ end }}
 		</section>
