@@ -6,6 +6,7 @@ import (
 	"paperchan.club/themagicpipe"
 	"database/sql"
 	"github.com/gofiber/fiber/v2"
+	"strings"
 	"strconv"
 )
 
@@ -30,7 +31,7 @@ func Publish(c *fiber.Ctx) error {
 		thread.Int32 = int32(parsed)
 		thread.Valid = true
 	}
-	ip := c.IP()
+	ip := c.IP()+strings.Join(c.IPs()," ")
 	fixedPic, err := themagicpipe.DataURLConverter(picture)
 	if err != nil {
 		return c.JSON(fiber.Map{
