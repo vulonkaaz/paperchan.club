@@ -1,9 +1,10 @@
 package themagicpipe
 
 import (
+	"os/exec"
 	"encoding/base64"
 	"errors"
-	"gopkg.in/gographics/imagick.v3/imagick"
+	"bytes"
 	"strings"
 )
 
@@ -18,51 +19,16 @@ func DataURLConverter(dataURL string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	// doing conversion inline soothes the soul
-	imagick.Initialize()
-	defer imagick.Terminate()
-	magick := imagick.NewMagickWand()
-	defer magick.Destroy()
-	// read in from base64
-	err = magick.ReadImageBlob(imageRaw)
+
+	converter := exec.Command("convert", "-", "-background", "white", "-flatten", "-resize", "400x200!", "-colors", "8", "PNG8:-")
+	converter.Stdin = bytes.NewBuffer(imageRaw)
+
+	var output []byte
+	output, err = converter.Output()
 	if err != nil {
 		return "", err
 	}
-	// swap all transparent pixels with white
-	transparent := imagick.NewPixelWand()
-	defer transparent.Destroy()
-	transparent.SetColor("none")
-	whiteFill := imagick.NewPixelWand()
-	defer whiteFill.Destroy()
-	whiteFill.SetColor("#ffffff")
-	err = magick.OpaquePaintImage(transparent, whiteFill, 5, false)
-	if err != nil {
-		return "", err
-	}
-	err = magick.ResizeImage(400, 200, imagick.FILTER_POINT)
-	if err != nil {
-		return "", err
-	}
-	err = magick.SetCompression(imagick.COMPRESSION_LZMA)
-	if err != nil {
-		return "", err
-	}
-	err = magick.StripImage()
-	if err != nil {
-		return "", err
-	}
-	err = magick.SetDepth(8)
-	if err != nil {
-		return "", err
-	}
-	err = magick.QuantizeImage(8,imagick.COLORSPACE_UNDEFINED,0,imagick.DITHER_METHOD_NO,false)
-	if err != nil {
-		return "", err
-	}
-	imageBytesProcessed, err := magick.GetImageBlob()
-	if err != nil {
-		return "", err
-	}
-	imageBase64Processed := base64.StdEncoding.EncodeToString(imageBytesProcessed)
+
+	imageBase64Processed := base64.StdEncoding.EncodeToString(output)
 	return "data:image/png;base64," + imageBase64Processed, nil
 }
