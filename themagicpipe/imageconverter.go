@@ -20,7 +20,7 @@ func DataURLConverter(dataURL string) (string, error) {
 		return "", err
 	}
 
-	converter := exec.Command("convert", "-", "-background", "white", "-flatten", "-resize", "400x200!", "-colors", "8", "PNG8:-")
+	converter := exec.Command("convert", "-", "-background", "white", "-flatten", "-resize", "400x200!", "-remap", "palette.png", "PNG8:-")
 	converter.Stdin = bytes.NewBuffer(imageRaw)
 
 	var output []byte
