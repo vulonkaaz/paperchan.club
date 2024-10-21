@@ -2,9 +2,13 @@
 			<canvas id="canvas" style="background:#fff; border:1px inset #888" width="400" height="200"></canvas><br>
 			<button type="button" id="blackbtn">Black</button> <button type="button" id="whitebtn">White</button>
 			<button type="button" id="redbtn">Red</button> <button type="button" id="bluebtn">Blue</button><br>
+			<button type="button" id="magentabtn">Magenta</button> <button type="button" id="cyanbtn">Cyan</button>
+			<button type="button" id="yellowbtn">Yellow</button> <button type="button" id="greenbtn">Green</button><br>
 			pen size : <input type="number" id="pensize" value="1" min="1" max="99"><br>
 			<button type="button" id="sendbtn">Send</button>
 		</div>
+		<p style="max-width: 400px;margin: auto;margin-bottom: 20px;">Pro tip: it case it ain't obvious you can use white as an eraser<br>
+			Librewolf users have to enable canvas access before sending</p>
 		<footer><a href="/about.html">About this site</a></footer>
 	</main>
 </body>
@@ -78,22 +82,42 @@
 
 	const blackbtn = document.getElementById('blackbtn');
 	blackbtn.addEventListener("click", () => {
-		ctx.strokeStyle="black";
+		ctx.strokeStyle="#000000";
 	});
 
 	const whitebtn = document.getElementById('whitebtn');
 	whitebtn.addEventListener("click", () => {
-		ctx.strokeStyle="white";
+		ctx.strokeStyle="#ffffff";
 	});
 
 	const redbtn = document.getElementById('redbtn');
 	redbtn.addEventListener("click", () => {
-		ctx.strokeStyle="red";
+		ctx.strokeStyle="#ff0000";
 	});
 
 	const bluebtn = document.getElementById('bluebtn');
 	bluebtn.addEventListener("click", () => {
-		ctx.strokeStyle="blue";
+		ctx.strokeStyle="#0000ff";
+	});
+
+	const greenbtn = document.getElementById('greenbtn');
+	greenbtn.addEventListener("click", () => {
+		ctx.strokeStyle="#00ff00";
+	});
+
+	const magentabtn = document.getElementById('magentabtn');
+	magentabtn.addEventListener("click", () => {
+		ctx.strokeStyle="#ff00ff";
+	});
+
+	const cyanbtn = document.getElementById('cyanbtn');
+	cyanbtn.addEventListener("click", () => {
+		ctx.strokeStyle="#00ffff";
+	});
+
+	const yellowbtn = document.getElementById('yellowbtn');
+	yellowbtn.addEventListener("click", () => {
+		ctx.strokeStyle="#ffff00";
 	});
 
 	const pensize = document.getElementById('pensize');
