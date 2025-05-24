@@ -1,10 +1,11 @@
-		<div class="editor">
+<div class="editor">
 			<canvas id="canvas" style="background:#fff; border:1px inset #888" width="400" height="200"></canvas><br>
 			<button type="button" id="blackbtn">Black</button> <button type="button" id="whitebtn">White</button>
 			<button type="button" id="redbtn">Red</button> <button type="button" id="bluebtn">Blue</button><br>
 			<button type="button" id="magentabtn">Magenta</button> <button type="button" id="cyanbtn">Cyan</button>
 			<button type="button" id="yellowbtn">Yellow</button> <button type="button" id="greenbtn">Green</button><br>
 			pen size : <input type="number" id="pensize" value="1" min="1" max="99"><br>
+			<button type="button" id="undobtn">Undo</button> <button type="button" id="clearbtn">Clear</button><br>
 			<button type="button" id="sendbtn">Send</button>
 		</div>
 		<p style="max-width: 400px;margin: auto;margin-bottom: 20px;">Pro tip: it case it ain't obvious you can use white as an eraser<br>
@@ -19,13 +20,34 @@
 	//ctx.fillStyle = "black";
 	let isDrawing = false;
 
+	let undoStack = [];
+	let maxUndoSteps = 20; // Adjust as needed
+
+	function saveState() {
+		undoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+		if (undoStack.length > maxUndoSteps) {
+			undoStack.shift();
+		}
+	}
+	function undo() {
+		if (undoStack.length > 0) {
+			const imageData = undoStack.pop();
+			ctx.putImageData(imageData, 0, 0);
+		}
+	}
+	function clear() {
+		saveState();
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+	}
 	function startDrawing(event) {
  		event.preventDefault();
+ 		saveState();
  		isDrawing = true;
  		draw(event);
 	}
 	function startDrawingTouch(event) {
  		event.preventDefault();
+ 		saveState();
  		isDrawing = true;
  		drawTouch(event);
 	}
@@ -80,6 +102,12 @@
 	const sendbtn = document.getElementById('sendbtn');
 	sendbtn.addEventListener("click", sendPic);
 
+	const undobtn = document.getElementById('undobtn');
+	undobtn.addEventListener("click", undo);
+	
+	const clearbtn = document.getElementById('clearbtn');
+	clearbtn.addEventListener("click", clear);
+
 	const blackbtn = document.getElementById('blackbtn');
 	blackbtn.addEventListener("click", () => {
 		ctx.strokeStyle="#000000";
@@ -125,7 +153,13 @@
 		ctx.lineWidth=pensize.value;
 		console.log(pensize.value)
 	});
+
+	// Keyboard shortcut for undo
+	document.addEventListener("keydown", function(event) {
+		if (event.ctrlKey && event.key === 'z') {
+			undo();
+		}
+	});
 </script>
 
 </html>
-
