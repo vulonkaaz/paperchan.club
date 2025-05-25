@@ -1,10 +1,11 @@
 		<div class="editor">
 			<canvas id="canvas" style="background:#fff; border:1px inset #888" width="400" height="200"></canvas><br>
-			<button type="button" id="blackbtn" style="background-color: black; width: 4em; height: 2em"></button> <button type="button" id="whitebtn" style="background-color: white; width: 4em; height: 2em"></button>
+      <button type="button" id="blackbtn" style="background-color: black; width: 4em; height: 2em"></button> <button type="button" id="whitebtn" style="background-color: white; width: 4em; height: 2em"></button>
 			<button type="button" id="redbtn" style="background-color: red; width: 4em; height: 2em"></button> <button type="button" id="bluebtn" style="background-color: blue; width: 4em; height: 2em"></button><br>
 			<button type="button" id="magentabtn" style="background-color: magenta; width: 4em; height: 2em"></button> <button type="button" id="cyanbtn" style="background-color: cyan; width: 4em; height: 2em"></button>
 			<button type="button" id="yellowbtn" style="background-color: yellow; width: 4em; height: 2em"></button> <button type="button" id="greenbtn" style="background-color: lime; width: 4em; height: 2em"></button><br>
-			pen size : <input type="number" id="pensize" value="1" min="1" max="99"><br>
+			pen size : <input type="range" id="pensize-slider" value="1" min="1" max="99" style="vertical-align: middle;"> 
+			<input type="number" id="pensize" value="1" min="1" max="99" style="width: 50px;"><br>
 			<button type="button" id="undobtn">Undo</button> <button type="button" id="clearbtn">Clear</button><br>
 			<button type="button" id="sendbtn">Send</button>
 		</div>
@@ -152,6 +153,16 @@
 	pensize.addEventListener("change", () => {
 		ctx.lineWidth=pensize.value;
 		console.log(pensize.value)
+	});
+	pensize.addEventListener("input", () => {
+		pensizeSlider.value = pensize.value;
+		ctx.lineWidth = pensize.value;
+	});
+
+	const pensizeSlider = document.getElementById('pensize-slider');
+	pensizeSlider.addEventListener("input", () => {
+		pensize.value = pensizeSlider.value;
+		ctx.lineWidth = pensizeSlider.value;
 	});
 
 	// Keyboard shortcut for undo
