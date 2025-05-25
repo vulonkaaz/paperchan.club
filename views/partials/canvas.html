@@ -4,7 +4,8 @@
 			<button type="button" id="redbtn">Red</button> <button type="button" id="bluebtn">Blue</button><br>
 			<button type="button" id="magentabtn">Magenta</button> <button type="button" id="cyanbtn">Cyan</button>
 			<button type="button" id="yellowbtn">Yellow</button> <button type="button" id="greenbtn">Green</button><br>
-			pen size : <input type="number" id="pensize" value="1" min="1" max="99"><br>
+			pen size : <input type="range" id="pensize-slider" value="1" min="1" max="99" style="vertical-align: middle;"> 
+			<input type="number" id="pensize" value="1" min="1" max="99" style="width: 50px;"><br>
 			<button type="button" id="undobtn">Undo</button> <button type="button" id="clearbtn">Clear</button><br>
 			<button type="button" id="sendbtn">Send</button>
 		</div>
@@ -152,6 +153,16 @@
 	pensize.addEventListener("change", () => {
 		ctx.lineWidth=pensize.value;
 		console.log(pensize.value)
+	});
+	pensize.addEventListener("input", () => {
+		pensizeSlider.value = pensize.value;
+		ctx.lineWidth = pensize.value;
+	});
+
+	const pensizeSlider = document.getElementById('pensize-slider');
+	pensizeSlider.addEventListener("input", () => {
+		pensize.value = pensizeSlider.value;
+		ctx.lineWidth = pensizeSlider.value;
 	});
 
 	// Keyboard shortcut for undo
