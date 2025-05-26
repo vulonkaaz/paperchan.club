@@ -1,6 +1,6 @@
 		<div class="editor">
 			<canvas id="canvas" style="background:#fff; border:1px inset #888" width="400" height="200"></canvas><br>
-      <button type="button" id="blackbtn" style="background-color: black; width: 4em; height: 2em"></button> <button type="button" id="whitebtn" style="background-color: white; width: 4em; height: 2em"></button>
+      		<button type="button" id="blackbtn" style="background-color: black; width: 4em; height: 2em"></button> <button type="button" id="whitebtn" style="background-color: white; width: 4em; height: 2em"></button>
 			<button type="button" id="redbtn" style="background-color: red; width: 4em; height: 2em"></button> <button type="button" id="bluebtn" style="background-color: blue; width: 4em; height: 2em"></button><br>
 			<button type="button" id="magentabtn" style="background-color: magenta; width: 4em; height: 2em"></button> <button type="button" id="cyanbtn" style="background-color: cyan; width: 4em; height: 2em"></button>
 			<button type="button" id="yellowbtn" style="background-color: yellow; width: 4em; height: 2em"></button> <button type="button" id="greenbtn" style="background-color: lime; width: 4em; height: 2em"></button><br>
@@ -18,6 +18,8 @@
 	const canvas = document.getElementById('canvas');
 	const ctx = canvas.getContext('2d');
 	ctx.getImageData(0, 0, 1, 1); // to trigger librewolf's protection (and allow users to enable canvas before publishing)
+	ctx.lineCap = "round";
+	ctx.lineJoin = "round";
 	//ctx.fillStyle = "black";
 	let isDrawing = false;
 
