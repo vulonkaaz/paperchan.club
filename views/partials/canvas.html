@@ -18,6 +18,8 @@
 	const canvas = document.getElementById('canvas');
 	const ctx = canvas.getContext('2d');
 	ctx.getImageData(0, 0, 1, 1); // to trigger librewolf's protection (and allow users to enable canvas before publishing)
+	ctx.lineCap = "round";
+	ctx.lineJoin = "round";
 	//ctx.fillStyle = "black";
 	let isDrawing = false;
 
