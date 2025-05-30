@@ -10,7 +10,8 @@ import (
 
 func SetRoutes(app *fiber.App) {
 	app.Get("/", controllers.ThreadList)
-	app.Get("/thread/:id", controllers.Thread)
+	app.Get("/:page<min(0)>", controllers.ThreadList)
+	app.Get("/thread/:id<min(0)>", controllers.Thread)
 	app.Post("/api/post", rateLimiter, controllers.Publish)
 	app.Delete("/api/post", controllers.Delete)
 }

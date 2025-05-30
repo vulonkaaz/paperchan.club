@@ -19,4 +19,9 @@
 			</article>
 			{{ end }}
 		</section>
+		<p>Page:
+			{{ range .pages }}
+			<a href="/{{.}}">[{{.}}]</a>
+			{{ end }}
+		</p>
 {{template "partials/canvas" .}}
