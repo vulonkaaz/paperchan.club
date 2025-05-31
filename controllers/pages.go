@@ -5,9 +5,11 @@ import (
 	"paperchan.club/models"
 	"github.com/gofiber/fiber/v2"
 	"log"
+	"math/rand"
 )
 
 const maxThreadsPerPage = 24
+const maxBanner = 12 // dont forget to increment whenever we add more
 
 func ThreadList(c *fiber.Ctx) error {
 	db := database.DB
@@ -35,6 +37,7 @@ func ThreadList(c *fiber.Ctx) error {
 	return c.Render("index", fiber.Map{
 		"posts": threads,
 		"pages": pages,
+		"banner": rand.Intn(maxBanner)+1,
 	})
 }
 
@@ -49,5 +52,6 @@ func Thread(c *fiber.Ctx) error {
 	return c.Render("thread", fiber.Map{
 		"threadId": id,
 		"posts": posts,
+		"banner": rand.Intn(maxBanner)+1,
 	})
 }
