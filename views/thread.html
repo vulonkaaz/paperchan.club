@@ -14,7 +14,7 @@
 		<p><a href="/">Home</a></p>
 		<section class="thread">
 			{{ range .posts }}
-			<article>
+			<article id="{{.Id}}">
 				<img src="{{.Picture}}">
 				<p>id: {{.Id}}<br>
 				{{.CreatedAt}}</p>
