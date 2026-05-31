@@ -9,7 +9,7 @@ import (
 )
 
 const maxThreadsPerPage = 24
-const maxBanner = 15 // dont forget to increment whenever we add more
+const maxBanner = 24 // dont forget to increment whenever we add more
 
 func ThreadList(c *fiber.Ctx) error {
 	db := database.DB
