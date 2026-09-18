@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"os"
 	"paperchan.club/database"
 	"paperchan.club/router"
 	"github.com/gofiber/fiber/v2"
@@ -15,7 +14,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	database.DBConnect(os.Getenv("DBSTRING"))
+	database.DBConnect("file:paperdb.db3")
 
 	engine := html.New("./views", ".html")
 

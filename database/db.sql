@@ -10,15 +10,16 @@
 BEGIN;
 
 CREATE TABLE "post" (
-	"id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-	"board" text DEFAULT 'b',
-	"picture" text NOT NULL,
-	"thread" int REFERENCES "post"("id"),
-	"reply_to" int REFERENCES "post"("id"),
-	"ip_address" text,
-	"special" text,
-	"created_at" timestamptz NOT NULL DEFAULT now(),
-	"updated_at" timestamptz
+	"id" INTEGER PRIMARY KEY AUTOINCREMENT,
+	"board" TEXT DEFAULT 'b',
+	"picture" TEXT NOT NULL,
+	"thread" INTEGER REFERENCES "post"("id"),
+	"reply_to" INTEGER REFERENCES "post"("id"),
+	"ip_address" TEXT,
+	"special" TEXT,
+	"created_at" INTEGER DEFAULT (unixepoch()),
+	FOREIGN KEY (thread) REFERENCES post(id),
+	FOREIGN KEY (reply_to) REFERENCES post(id)
 );
 
 COMMIT;

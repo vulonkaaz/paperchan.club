@@ -2,9 +2,8 @@ package models
 
 import (
 	"database/sql"
-	"github.com/lib/pq"
-	"time"
 	"html/template"
+	"time"
 )
 
 type Post struct {
@@ -15,8 +14,8 @@ type Post struct {
 	ReplyTo sql.NullInt32 `db:"reply_to"`
 	IpAddress sql.NullString `db:"ip_address"`
 	Special sql.NullString `db:"special"`
-	CreatedAt time.Time `db:"created_at"`
-	UpdatedAt pq.NullTime `db:"updated_at"`
+	CreatedAt int64 `db:"created_at"`
+	CreatedAtFormatted time.Time  // this isn't stored in the database but generated from CreatedAt, it mostly exist for display
 }
 
 type Thread struct {
@@ -27,7 +26,7 @@ type Thread struct {
 	ReplyTo sql.NullInt32 `db:"reply_to"`
 	IpAddress sql.NullString `db:"ip_address"`
 	Special sql.NullString `db:"special"`
-	CreatedAt time.Time `db:"created_at"`
-	UpdatedAt pq.NullTime `db:"updated_at"`
+	CreatedAt int64 `db:"created_at"`
+	CreatedAtFormatted time.Time  // this isn't stored in the database but generated from CreatedAt, it mostly exist for display
 	Replies int `db:"replies"`
 }

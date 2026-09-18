@@ -6,6 +6,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"log"
 	"math/rand"
+	"time"
 )
 
 const maxThreadsPerPage = 24
@@ -30,9 +31,13 @@ func ThreadList(c *fiber.Ctx) error {
 	}
 	offset := maxThreadsPerPage * (page - 1)
 	var threads []models.Thread
-	if err := db.Select(&threads, "SELECT a.*, (SELECT COUNT(*) FROM \"post\" AS b WHERE b.thread = a.id) AS replies FROM \"post\" AS \"a\" WHERE \"thread\" IS NULL ORDER BY (SELECT c.created_at FROM \"post\" AS c WHERE c.thread = a.id OR c.id = a.id ORDER BY c.created_at DESC LIMIT 1) DESC LIMIT $1 OFFSET $2", maxThreadsPerPage, offset); err != nil {
+	if err := db.Select(&threads, "SELECT a.*,COUNT(b.id) AS replies FROM post AS a LEFT JOIN post AS b ON a.id = b.thread WHERE a.thread IS NULL GROUP BY a.id ORDER BY COALESCE(MAX(b.created_at), a.created_at) DESC LIMIT $1 OFFSET $2", maxThreadsPerPage, offset); err != nil {
 		log.Println(err)
 		return c.Status(500).SendString("ERROR")
+	}
+	for i := range threads {
+		thread := &threads[i]
+		thread.CreatedAtFormatted = time.Unix(thread.CreatedAt,0)
 	}
 	return c.Render("index", fiber.Map{
 		"posts": threads,
@@ -48,6 +53,10 @@ func Thread(c *fiber.Ctx) error {
 	if err := db.Select(&posts, "SELECT * FROM \"post\" WHERE id = $1 OR thread = $1 ORDER BY created_at ASC", id); err != nil {
 		log.Println(err)
 		return c.Status(500).SendString("ERROR")
+	}
+	for i := range posts {
+		post := &posts[i]
+		post.CreatedAtFormatted = time.Unix(post.CreatedAt,0)
 	}
 	return c.Render("thread", fiber.Map{
 		"threadId": id,
