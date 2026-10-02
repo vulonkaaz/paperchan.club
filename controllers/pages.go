@@ -7,15 +7,24 @@ import (
 	"log"
 	"math/rand"
 	"time"
+	"strings"
+	"slices"
 )
 
 const maxThreadsPerPage = 24
 const maxBanner = 32 // dont forget to increment whenever we add more
+var Boards = []string{"b","trash"}
 
 func ThreadList(c *fiber.Ctx) error {
+	var board string
+	board = strings.Split(c.Path(), "/")[1]
+	if !slices.Contains(Boards, board) {
+		board = Boards[0]
+	}
+
 	db := database.DB
 	var nthread []int
-	if err := db.Select(&nthread, "SELECT COUNT(*) FROM \"post\" WHERE \"thread\" IS NULL"); err != nil {
+	if err := db.Select(&nthread, "SELECT COUNT(*) FROM \"post\" WHERE \"thread\" IS NULL AND board = $1", board); err != nil {
 		log.Println(err)
 		return c.Status(500).SendString("ERROR")
 	}
@@ -31,7 +40,7 @@ func ThreadList(c *fiber.Ctx) error {
 	}
 	offset := maxThreadsPerPage * (page - 1)
 	var threads []models.Thread
-	if err := db.Select(&threads, "SELECT a.*,COUNT(b.id) AS replies FROM post AS a LEFT JOIN post AS b ON a.id = b.thread WHERE a.thread IS NULL GROUP BY a.id ORDER BY COALESCE(MAX(b.created_at), a.created_at) DESC LIMIT $1 OFFSET $2", maxThreadsPerPage, offset); err != nil {
+	if err := db.Select(&threads, "SELECT a.*,COUNT(b.id) AS replies FROM post AS a LEFT JOIN post AS b ON a.id = b.thread WHERE a.thread IS NULL AND a.board = $1 GROUP BY a.id ORDER BY COALESCE(MAX(b.created_at), a.created_at) DESC LIMIT $2 OFFSET $3", board, maxThreadsPerPage, offset); err != nil {
 		log.Println(err)
 		return c.Status(500).SendString("ERROR")
 	}
@@ -40,6 +49,8 @@ func ThreadList(c *fiber.Ctx) error {
 		thread.CreatedAtFormatted = time.Unix(thread.CreatedAt,0)
 	}
 	return c.Render("index", fiber.Map{
+		"boards": Boards,
+		"board": board,
 		"posts": threads,
 		"pages": pages,
 		"banner": rand.Intn(maxBanner)+1,
@@ -59,6 +70,7 @@ func Thread(c *fiber.Ctx) error {
 		post.CreatedAtFormatted = time.Unix(post.CreatedAt,0)
 	}
 	return c.Render("thread", fiber.Map{
+		"boards": Boards,
 		"threadId": id,
 		"posts": posts,
 		"banner": rand.Intn(maxBanner)+1,

@@ -10,7 +10,7 @@
 			<button type="button" id="sendbtn">Send</button>
 		</div>
 		<p style="max-width: 400px;margin: auto;margin-bottom: 20px;">Pro tip: in case it ain't obvious you can use white as an eraser<br>
-			Librewolf users have to enable canvas access before sending</p>
+			Librewolf users have to enable canvas access BEFORE sending</p>
 		<footer><a href="/about.html">About this site</a></footer>
 	</main>
 </body>
@@ -89,6 +89,7 @@
 			method: "POST",
 			body: JSON.stringify({ {{ if .threadId }}
 				thread: "{{.threadId}}",{{ end }}
+				{{ if .board }}board: "{{.board}}",{{ end }}
 				picture: canvas.toDataURL("image/png")
 			}),
 			headers: {

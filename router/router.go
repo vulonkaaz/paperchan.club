@@ -14,6 +14,14 @@ func SetRoutes(app *fiber.App) {
 	app.Get("/thread/:id<min(0)>", controllers.Thread)
 	app.Post("/api/post", rateLimiter, controllers.Publish)
 	app.Delete("/api/post", controllers.Delete)
+
+	// generating all the routes for boards defined in
+	// ../controllers/pages.go
+	for _,board := range controllers.Boards {
+		app.Get("/"+board, controllers.ThreadList)
+		app.Get("/"+board+"/:page<min(0)>", controllers.ThreadList)
+	}
+
 }
 
 var rateLimiter = limiter.New(limiter.Config{

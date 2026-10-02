@@ -11,6 +11,10 @@
 	<main>
 		<img src="/banner/{{.banner}}.png" alt="Paperchan banner" class="banner" />
 		<h1>Paperchan.club</h1>
+		<p class="boardlist">{{ range .boards }}
+			<a href="/{{.}}">/{{.}}/</a> 
+			{{ end }}
+		</p>
 		<section class="threadlist">
 			{{ range .posts }}
 			<article>
@@ -22,7 +26,7 @@
 		</section>
 		<p>Page:
 			{{ range .pages }}
-			<a href="/{{.}}">[{{.}}]</a>
+			<a href="/{{$.board}}/{{.}}">[{{.}}]</a>
 			{{ end }}
 		</p>
 {{template "partials/canvas" .}}

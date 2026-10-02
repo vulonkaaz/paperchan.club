@@ -14,6 +14,7 @@ import (
 type PostApi struct {
     Picture string `json:"picture" xml:"picture" form:"picture"`
     Thread string `json:"thread" xml:"thread" form:"thread"`
+    Board string `json:"board" xml:"board" form:"board"`
 }
 
 func Publish(c *fiber.Ctx) error {
@@ -24,6 +25,7 @@ func Publish(c *fiber.Ctx) error {
 		})
    }
 	picture := p.Picture
+	board := p.Board
 	var thread sql.NullInt32
 	if parsed, err := strconv.ParseInt(p.Thread, 10, 32); err != nil {
 		thread.Valid = false
@@ -39,7 +41,7 @@ func Publish(c *fiber.Ctx) error {
 		})
 	}
 	db := database.DB
-	if _, err := db.Exec("INSERT INTO \"post\" (picture, ip_address, thread) VALUES ($1, $2, $3)", fixedPic, ip, thread); err == nil {
+	if _, err := db.Exec("INSERT INTO \"post\" (picture, ip_address, thread, board) VALUES ($1, $2, $3, $4)", fixedPic, ip, thread, board); err == nil {
 		return c.JSON(fiber.Map{
 			"status": "ok",
 		})
